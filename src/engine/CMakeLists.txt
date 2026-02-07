@@ -1,5 +1,5 @@
-add_library(engine_interface INTERFACE)
-target_sources(engine_interface
+add_library(Engine_Interface INTERFACE)
+target_sources(Engine_Interface
         INTERFACE
         client.h
         config.h

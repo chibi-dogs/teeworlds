@@ -1,5 +1,5 @@
 
-add_library(engine_shared SHARED)
+add_library(Engine_Shared STATIC)
 
 set(PROTOCOL_HEADER "${CMAKE_BINARY_DIR}/src/generated/protocol.h")
 set(PROTOCOL_SOURCE "${CMAKE_BINARY_DIR}/src/generated/protocol.cpp")
@@ -49,7 +49,7 @@ add_custom_command(
         COMMENT "Generating nethash.cpp"
 )
 
-target_sources(engine_shared
+target_sources(Engine_Shared
         PRIVATE
         compression.cpp
         config.cpp
@@ -108,14 +108,14 @@ target_sources(engine_shared
         ${PROTOCOL_HEADER}
 )
 
-target_compile_features(engine_shared
+target_compile_features(Engine_Shared
         PUBLIC cxx_std_23
 )
 
-target_include_directories(engine_shared
+target_include_directories(Engine_Shared
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/src>
 )
 
-target_link_libraries(engine_shared PUBLIC engine_external_json base engine_external_zlib)
+target_link_libraries(Engine_Shared PUBLIC engine_external_json base engine_external_zlib)
