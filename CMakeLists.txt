@@ -5,6 +5,19 @@ file(STRINGS src/game/version.h VERSION_LINE
   REGEX GAME_RELEASE_VERSION
 )
 
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Pedantic warnings
+if(MSVC)
+  # MSVC warning flags for maximum warning level
+  add_compile_options(/W4 /permissive-)
+else()
+  # GCC / Clang
+  add_compile_options(-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion)
+endif()
+
 if(VERSION_LINE MATCHES "\"([0-9]+)\\.([0-9]+)\\.([0-9]+|[0-9]+\\.[0-9]+)\"")
   set(VERSION_MAJOR ${CMAKE_MATCH_1})
   set(VERSION_MINOR ${CMAKE_MATCH_2})
@@ -1232,7 +1245,7 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/src/generated/git_revision.cpp
     ${GIT_REVISION_EXTRA_DEPS}
     scripts/git_revision.py
 )
-chash("src/generated/nethash.cpp"
+chash(#"src/generated/nethash.cpp"
   "src/engine/shared/protocol.h"
   "src/game/tuning.h"
   "src/game/gamecore.cpp"
@@ -1240,8 +1253,8 @@ chash("src/generated/nethash.cpp"
 )
 generate_source("src/generated/client_data.cpp" "client_content_source")
 generate_source("src/generated/client_data.h" "client_content_header")
-generate_source("src/generated/protocol.cpp" "network_source")
-generate_source("src/generated/protocol.h" "network_header")
+#generate_source("src/generated/protocol.cpp" "network_source")
+#generate_source("src/generated/protocol.h" "network_header")
 generate_source("src/generated/server_data.cpp" "server_content_source")
 generate_source("src/generated/server_data.h" "server_content_header")
 
@@ -2145,3 +2158,5 @@ foreach(target ${TARGETS_DEP})
     target_compile_options(${target} PRIVATE ${OUR_FLAGS_DEP})
   endif()
 endforeach()
+
+add_subdirectory(src)

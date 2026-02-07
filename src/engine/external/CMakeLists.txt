@@ -1,0 +1,5 @@
+add_subdirectory(json-parser)
+add_subdirectory(md5)
+add_subdirectory(pnglite)
+add_subdirectory(wavpack)
+add_subdirectory(zlib)
