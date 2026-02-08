@@ -1,11 +1,11 @@
-add_library(base)
+add_library(Base)
 
-target_include_directories(base
+target_include_directories(Base
         PUBLIC
         ${PROJECT_SOURCE_DIR}/src
 )
 
-target_sources(base
+target_sources(Base
         PRIVATE
         hash.c
         hash_bundled.c
@@ -29,4 +29,4 @@ target_sources(base
         vmath.h
 
 )
-target_link_libraries(base PUBLIC engine_external_md5)
+target_link_libraries(Base PUBLIC engine_external_md5)

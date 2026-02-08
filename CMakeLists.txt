@@ -1246,10 +1246,10 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/src/generated/git_revision.cpp
     scripts/git_revision.py
 )
 chash(#"src/generated/nethash.cpp"
-  "src/engine/shared/protocol.h"
+  #"src/engine/shared/protocol.h"
   "src/game/tuning.h"
   "src/game/gamecore.cpp"
-  "${PROJECT_BINARY_DIR}/src/generated/protocol.h"
+  #"${PROJECT_BINARY_DIR}/src/generated/protocol.h"
 )
 generate_source("src/generated/client_data.cpp" "client_content_source")
 generate_source("src/generated/client_data.h" "client_content_header")
@@ -1528,6 +1528,42 @@ if(CLIENT)
 
   set(DEPS_CLIENT ${DEPS} ${PNGLITE_DEP} ${WAVPACK_DEP})
 
+
+  # Engine-side client code (including platform entry)
+  set(ENGINE_CLIENT_SRC
+          ${PLATFORM_CLIENT}
+          ${ENGINE_CLIENT}
+  )
+
+  # Application-side code
+  set(CLIENT_APP_SRC
+          ${GAME_CLIENT}
+          ${GAME_EDITOR}
+          ${GAME_GENERATED_CLIENT}
+  )
+
+  add_library(Engine STATIC
+          ${ENGINE_CLIENT_SRC}
+  )
+
+  target_link_libraries(Engine
+          PUBLIC
+          Engine_Shared
+          Base
+  )
+  target_include_directories(Engine
+    PUBLIC
+          ${SDL2_INCLUDE_DIRS}
+          ${WAVPACK_INCLUDE_DIRS}
+          ${PNGLITE_INCLUDE_DIRS}
+          ${FREETYPE_INCLUDE_DIRS}
+  )
+
+  if(TARGET_OS STREQUAL "mac")
+    target_link_libraries(Engine PRIVATE ${COCOA} ${OPENGL})
+    target_link_options(Engine PRIVATE "-ObjC")
+  endif()
+
   # Libraries
   set(LIBS_CLIENT
     ${LIBS}
@@ -1552,14 +1588,16 @@ if(CLIENT)
   # Target
   set(TARGET_CLIENT ${CLIENT_EXECUTABLE})
   add_executable(${TARGET_CLIENT}
-    ${CLIENT_SRC}
-    ${CLIENT_ICON}
-    ${CLIENT_MANIFEST}
-    ${DEPS_CLIENT}
-    $<TARGET_OBJECTS:engine-shared>
-    $<TARGET_OBJECTS:game-shared>
+          ${CLIENT_APP_SRC}
+          ${CLIENT_ICON}
+          ${CLIENT_MANIFEST}
+          ${DEPS_CLIENT}
+          $<TARGET_OBJECTS:game-shared>
   )
-  target_link_libraries(${TARGET_CLIENT} ${LIBS_CLIENT})
+  target_link_libraries(${TARGET_CLIENT}
+          Engine
+          ${LIBS_CLIENT}
+  )
 
   target_include_directories(${TARGET_CLIENT} PRIVATE
     ${FREETYPE_INCLUDE_DIRS}

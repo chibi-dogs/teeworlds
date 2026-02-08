@@ -118,4 +118,4 @@ target_include_directories(Engine_Shared
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/src>
 )
 
-target_link_libraries(Engine_Shared PUBLIC engine_external_json base engine_external_zlib)
+target_link_libraries(Engine_Shared PUBLIC engine_external_json Base engine_external_zlib)

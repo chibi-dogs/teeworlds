@@ -22,6 +22,8 @@ target_sources(Engine_Interface
         storage.h
         textrender.h
 )
+target_link_libraries(Engine_Interface INTERFACE Engine_Shared)
+
 
 add_subdirectory(external)
 add_subdirectory(shared)

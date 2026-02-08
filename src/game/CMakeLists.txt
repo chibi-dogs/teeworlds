@@ -19,4 +19,4 @@ target_sources(game_shared
         voting.h
 )
 
-target_link_libraries(game_shared PUBLIC base engine_shared)
+target_link_libraries(game_shared PUBLIC Base Engine_Shared)
