@@ -310,7 +310,8 @@ find_package(Freetype)
 find_package(Git)
 find_package(GTest)
 find_package(Pnglite)
-find_package(SDL2)
+find_package(SDL2 REQUIRED)
+#find_package(SDL2)
 find_package(Threads)
 find_package(Wavpack)
 
@@ -362,7 +363,6 @@ endif()
 show_dependency_status("OpenSSL Crypto" CRYPTO)
 show_dependency_status("Pnglite" PNGLITE)
 show_dependency_status("Python3" Python3)
-show_dependency_status("SDL2" SDL2)
 show_dependency_status("Wavpack" WAVPACK)
 show_dependency_status("Zlib" ZLIB)
 
@@ -372,9 +372,6 @@ endif()
 
 if(CLIENT AND NOT(FREETYPE_FOUND))
   message(SEND_ERROR "You must install Freetype to compile the Teeworlds client")
-endif()
-if(CLIENT AND NOT(SDL2_FOUND))
-  message(SEND_ERROR "You must install SDL2 to compile the Teeworlds client")
 endif()
 if(NOT(GTEST_FOUND))
   if(DOWNLOAD_GTEST)
@@ -1550,10 +1547,10 @@ if(CLIENT)
           PUBLIC
           Engine_Shared
           Base
+          SDL2::SDL2
   )
   target_include_directories(Engine
     PUBLIC
-          ${SDL2_INCLUDE_DIRS}
           ${WAVPACK_INCLUDE_DIRS}
           ${PNGLITE_INCLUDE_DIRS}
           ${FREETYPE_INCLUDE_DIRS}

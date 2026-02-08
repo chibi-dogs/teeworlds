@@ -44,7 +44,7 @@
 #include "serverbrowser.h"
 #include "client.h"
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #ifdef main
 #undef main
 #endif
