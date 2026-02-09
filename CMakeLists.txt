@@ -1192,27 +1192,27 @@ generate_source("src/generated/server_data.h" "server_content_header")
 ########################################################################
 
 # Sources
-set_src(BASE GLOB_RECURSE src/base
-  color.h
-  detect.h
-  hash.c
-  hash.h
-  hash_bundled.c
-  hash_ctxt.h
-  hash_libtomcrypt.c
-  hash_openssl.c
-  math.h
-  system.c
-  system.h
-  tl/algorithm.h
-  tl/allocator.h
-  tl/array.h
-  tl/range.h
-  tl/sorted_array.h
-  tl/string.h
-  tl/threading.h
-  vmath.h
-)
+#set_src(BASE GLOB_RECURSE src/base
+#  color.h
+#  detect.h
+#  hash.c
+#  hash.h
+#  hash_bundled.c
+#  hash_ctxt.h
+#  hash_libtomcrypt.c
+#  hash_openssl.c
+#  math.h
+#  system.c
+#  system.h
+#  tl/algorithm.h
+#  tl/allocator.h
+#  tl/array.h
+#  tl/range.h
+#  tl/sorted_array.h
+#  tl/string.h
+#  tl/threading.h
+#  vmath.h
+#)
 set_src(ENGINE_INTERFACE GLOB src/engine
   client.h
   config.h

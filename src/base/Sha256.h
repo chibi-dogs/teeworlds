@@ -23,16 +23,30 @@ namespace cryptographic_hashing
                 sha256_update(&ctxt_, input.data(), input.size());
             } else
             {
-                throw std::logic_error("not allowed!");
+                throw std::logic_error("Update called after Finish!");
             }
 
         }
-        void Update(const std::string& s)
+
+        void Update(const std::string_view s)
         {
             Update(std::as_bytes(std::span(s.data(), s.size())));
         }
+        void Update(const char* data, const std::size_t len)
+        {
+            Update(std::as_bytes(std::span(data, len)));
+        }
+
+        void Update(const std::vector<std::byte>& v)
+        {
+            Update(std::span(v));
+        }
         [[nodiscard]] SHA256_DIGEST Finish()
         {
+            if (finished_)
+            {
+                throw std::logic_error("Finish was already called on this context!");
+            }
             finished_ = true;
             return sha256_finish(&ctxt_);
         };

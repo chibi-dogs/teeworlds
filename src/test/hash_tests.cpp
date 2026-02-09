@@ -218,14 +218,15 @@ TEST(Hash, InputSize100MBClass)
 	Expect(sha.Finish(), "826721880263dcc23004cb09bb7a70bb3f102219411c9e8125fcf5dae0379ed8");
 }
 
-// TEST(Hash, BinaryDataClass)
-// {
-// 	using namespace cryptographic_hashing;
-// 	Sha256 sha{};
-// 	constexpr unsigned char data[] = {0x00, 0xFF, 0x00};
-// 	sha.Update(data);
-// 	Expect(sha.Finish(), "2c8d07cd986f58eb210bd800133d6645c7340c59865377c8ea431cebca0b3113");
-// }
+TEST(Hash, BinaryDataClass)
+{
+	using namespace cryptographic_hashing;
+	Sha256 sha{};
+	constexpr unsigned char data[] = {0x00, 0xFF, 0x00};
+	const std::span<const std::byte> bytes = std::as_bytes(std::span(data));
+	sha.Update(bytes);
+	Expect(sha.Finish(), "2c8d07cd986f58eb210bd800133d6645c7340c59865377c8ea431cebca0b3113");
+}
 
 TEST(Hash, UpdateAfterFinishClass)
 {
@@ -252,10 +253,7 @@ TEST(Hash, MultipleFinishesClass)
 	sha.Update(world);
 
 	const auto result1 = sha.Finish();
-	const auto result2 = sha.Finish();
-
-	// Calling finish twice should produce different results if class mimics C version
-	EXPECT_NE(result1, result2);
+	EXPECT_THROW(sha.Finish(), std::logic_error);
 }
 
 TEST(Hash, Sha256NeqClass)
@@ -315,4 +313,21 @@ TEST(Hash, EmptyUpdatesClass)
 	constexpr auto expected = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
 	Expect(result, expected);
+}
+
+TEST(Hash, UpdateOverloads)
+{
+	cryptographic_hashing::Sha256 sha;
+	std::string s = "abc";
+	sha.Update(s);
+
+	const std::vector<std::byte> bytes = {std::byte{'d'}, std::byte{'e'}, std::byte{'f'}};
+	sha.Update(bytes);
+
+	const char* cstr = "ghi";
+	sha.Update(cstr);
+
+	auto digest = sha.Finish();
+	constexpr auto expected = "19cc02f26df43cc571bc9ed7b0c4d29224a3ec229529221725ef76d021c8326f";
+	Expect(digest, expected);
 }

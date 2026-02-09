@@ -15,6 +15,7 @@ target_sources(Base
         system.c
         PUBLIC
         color.h
+        Sha256.h
         detect.h
         hash.h
         hash_ctxt.h
