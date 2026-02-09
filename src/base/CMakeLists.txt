@@ -1,4 +1,5 @@
-add_library(Base)
+add_library(Base
+        Sha256.h)
 
 target_include_directories(Base
         PUBLIC
